@@ -1,6 +1,6 @@
 from src.utils.query_runner import QueryRunner
 
-class TownRepository():
+class TownRepository:
 
     @staticmethod
     async def create(town_id:str,town_name:str,city_id:str,city_name:str,state_id:int):

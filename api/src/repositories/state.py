@@ -1,6 +1,6 @@
 from src.utils.query_runner import QueryRunner
 
-class StateRepository():
+class StateRepository:
 
     @staticmethod
     async def create(code:str,name:str):
