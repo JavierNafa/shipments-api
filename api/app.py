@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.routes import state
+from src.routes import state,town
 from settings import fastapi_debug
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,6 +18,7 @@ app.add_middleware(
 )
 
 app.include_router(state.router)
+app.include_router(town.router)
 
 @app.on_event('startup')
 async def startup():
