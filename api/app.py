@@ -1,8 +1,11 @@
 from fastapi import FastAPI
 from src.routes import state
 from settings import fastapi_debug
-from src.database.shipments import DatabaseShipments
+from sqlalchemy.exc import SQLAlchemyError
 from fastapi.middleware.cors import CORSMiddleware
+from src.database.shipments import DatabaseShipments
+from src.middlewares.error_handler import ErrorHandler
+from fastapi.exceptions import RequestValidationError,HTTPException,StarletteHTTPException
 
 app = FastAPI(debug=bool(fastapi_debug),title='Shipments API')
 
@@ -23,3 +26,18 @@ async def startup():
 @app.on_event('shutdown')
 async def shutdown():
     await DatabaseShipments.disconnect()
+
+@app.exception_handler(RequestValidationError)
+async def validation_error_handler(request,e):
+    json_response = await ErrorHandler.handle_error(request,e)
+    return json_response
+
+@app.exception_handler(SQLAlchemyError)
+async def database_error_handler(request,e):
+    json_response = await ErrorHandler.handle_error(request,e)
+    return json_response
+
+@app.exception_handler(StarletteHTTPException)
+async def http_error_handler(request,e):
+    json_response = await ErrorHandler.handle_error(request,e)
+    return json_response
