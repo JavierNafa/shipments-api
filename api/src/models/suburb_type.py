@@ -1,0 +1,22 @@
+from enum import Enum
+
+class SuburbType(str,Enum):
+    aeropuerto = 'Aeropuerto'
+    barrio = 'Barrio'
+    colonia = 'Colonia'
+    condominio = 'Condominio'
+    ejido = 'Ejido'
+    fquipamiento = 'Equipamiento'
+    fraccionamiento = 'Fraccionamiento'
+    granja = 'Granja'
+    hacienda = 'Hacienda'
+    paraje = 'Paraje'
+    parque_industrial = 'Parque industrial'
+    pueblo = 'Pueblo'
+    ranchería = 'Ranchería'
+    rancho = 'Rancho'
+    unidad_habitacional = 'Unidad habitacional'
+    zona_comercial = 'Zona comercial'
+    zona_federal = 'Zona federal'
+    zona_ndustrial = 'Zona industrial'
+    zona_militar = 'Zona militar'
