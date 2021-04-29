@@ -388,6 +388,7 @@ CREATE OR REPLACE FUNCTION delete_suburb(_id INT)
 			status_code := 200;
 			RETURN JSON_BUILD_OBJECT('success',success,'message',message,'statusCode',status_code,'data',NULL);
 		END IF;
+		status_code := 404;
 		message := 'That suburb does not exist';
 		RETURN JSON_BUILD_OBJECT('success',success,'message',message,'statusCode',status_code,'data',data);
 	END;
@@ -435,6 +436,7 @@ CREATE OR REPLACE FUNCTION read_user(_username VARCHAR(150))
 										 from "user" WHERE UPPER(username) = UPPER(_username)) t;
 			RETURN JSON_BUILD_OBJECT('success',true,'message','OK','statusCode',200,'data',data);
 		END IF;
+		status_code := 404;
 		message := 'This username does not exist.';
 		RETURN JSON_BUILD_OBJECT('success',success,'message',message,'statusCode',status_code,'data',data);
 	END;

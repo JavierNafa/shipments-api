@@ -33,3 +33,12 @@ class AccountService:
             return api_response
         except Exception as e:
             raise e
+    
+    @staticmethod
+    async def check_user(username:str):
+        try:
+            result = await UserRepository.read(username=username)
+            success,message,status_code,data = result.values()
+            return success,status_code,message
+        except Exception as e:
+            raise e
