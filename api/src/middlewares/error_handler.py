@@ -1,4 +1,5 @@
 from sqlalchemy.exc import SQLAlchemyError
+from jwt import InvalidTokenError
 from fastapi.responses import JSONResponse
 from src.models.api_response import ApiResponse
 from fastapi.exceptions import RequestValidationError,StarletteHTTPException
@@ -19,6 +20,10 @@ class ErrorHandler():
             return json_response
         elif isinstance(e,StarletteHTTPException):
             api_response = ApiResponse(message=e.detail,data=None,success=False,statusCode=e.status_code)
+            json_response = JSONResponse(content=dict(api_response),status_code=api_response.statusCode)
+            return json_response
+        elif isinstance(e,InvalidTokenError):
+            api_response = ApiResponse(message='Invalid token',data=None,success=False,statusCode=403)
             json_response = JSONResponse(content=dict(api_response),status_code=api_response.statusCode)
             return json_response
         api_response = ApiResponse(message=f'Unexpected error: {e}',data=None,success=False,statusCode=500)

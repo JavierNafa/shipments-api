@@ -1,6 +1,8 @@
-from fastapi import FastAPI
-from src.routes import state,town,suburb
+from fastapi import FastAPI,Request,Depends
+from src.routes import state,town,suburb,account
 from settings import fastapi_debug
+from jwt import InvalidTokenError
+from src.middlewares.auth import verify_token
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi.middleware.cors import CORSMiddleware
 from src.database.shipments import DatabaseShipments
@@ -17,9 +19,10 @@ app.add_middleware(
     allow_headers=['Origin','X-Requested-With','Content-Type','Accept','Authorization']
 )
 
-app.include_router(state.router)
-app.include_router(town.router)
-app.include_router(suburb.router)
+app.include_router(account.router)
+app.include_router(state.router,dependencies=[Depends(verify_token)])
+app.include_router(town.router,dependencies=[Depends(verify_token)])
+app.include_router(suburb.router,dependencies=[Depends(verify_token)])
 
 @app.on_event('startup')
 async def startup():
@@ -28,6 +31,11 @@ async def startup():
 @app.on_event('shutdown')
 async def shutdown():
     await DatabaseShipments.disconnect()
+
+@app.exception_handler(InvalidTokenError)
+async def token_error_handler(request,e):
+    json_response = await ErrorHandler.handle_error(request,e)
+    return json_response
 
 @app.exception_handler(RequestValidationError)
 async def validation_error_handler(request,e):

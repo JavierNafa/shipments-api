@@ -4,7 +4,7 @@ from pydantic import BaseModel,fields
 from src.models.suburb_type import SuburbType
 
 class Suburb(BaseModel):
-    id:Optional[int] = fields.Field(None,ge=0)
+    id:Optional[int] = fields.Field(None,ge=1)
     uniqueSuburbTownId:str = fields.Field(min_length=1,max_length=100,regex='^([\s\d]+)$')
     name:str = fields.Field(min_length=1,max_length=50)
     postalCode:int = fields.Field(ge=10000,le=99999)
